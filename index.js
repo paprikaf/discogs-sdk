@@ -11,7 +11,7 @@ require('dotenv').config()
  *
  * @param {string} consumerKey - The consumer key.
  * @param {string} consumerSecret - The consumer secret.
- * @returns {Promise<string>} - A promise that resolves with the OAuth token.
+ * @returns {Promise<string>} - A promise that resolves with the request token.
  */
 async function getRequestToken(consumerKey, consumerSecret) {
   const url = 'https://api.discogs.com/oauth/request_token';
@@ -54,8 +54,9 @@ async function getRequestToken(consumerKey, consumerSecret) {
  *
  * @param {string} consumerKey - The consumer key.
  * @param {string} consumerSecret - The consumer secret.
- * @param {string} oauthToken - The OAuth token.
+ * @param {string} oauthToken - The OAuth access token.
  * @param {string} oauthVerifier - The OAuth verifier.
+ * @param {string} tokenSecret - The OAuth request token secret.
  * @returns {Promise<Object>} - A promise that resolves with the access token object.
  */
 async function getAccessToken(consumerKey, consumerSecret, oauthToken, oauthVerifier, tokenSecret) {
@@ -88,7 +89,8 @@ async function getAccessToken(consumerKey, consumerSecret, oauthToken, oauthVeri
  *
  * @param {string} consumerKey - The consumer key.
  * @param {string} consumerSecret - The consumer secret.
- * @param {string} oauthToken - The OAuth token.
+ * @param {string} oauthToken - The OAuth access token.
+ * @param {string} oauthTokenSecret - The OAuth access token secret.
  * @returns {Promise<Object>} - A promise that resolves with the user identity object.
  */
 async function getUserIdentity(consumerKey, consumerSecret, oauthToken, oauthTokenSecret) {
