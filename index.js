@@ -36,13 +36,12 @@ async function getRequestToken(consumerKey, consumerSecret) {
 
   try {
     const response = await axios(config);
-    const oauthToken = response.data.split('&')[0].split('=')[1];
     const searchParams = new URLSearchParams(response.data);
 
     return {
       oauthRequestToken: searchParams.get('oauth_token'),
       oauthRequestTokenSecret: searchParams.get('oauth_token_secret'),
-      verificationURL: `https://www.discogs.com/oauth/authorize?oauth_token=${oauthToken}`
+      verificationURL: `https://www.discogs.com/oauth/authorize?oauth_token=${searchParams.get('oauth_token')}`
     };
   } catch (error) {
     throw new Error(error.response.data);
