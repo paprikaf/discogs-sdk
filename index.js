@@ -5,31 +5,6 @@ const crypto = require('crypto');
 const prompt = require("prompt-sync")({ sigint: true });
 require('dotenv').config()
 
-/**
- * Generates the OAuth1 signature.
- *
- * @param {string} method - The HTTP method.
- * @param {string} url - The URL.
- * @param {string} params - The request parameters.
- * @param {string} consumerKey - The consumer key.
- * @param {string} consumerSecret - The consumer secret.
- * @returns {string} - The generated signature.
- */
-function generateOAuth1Signature(method, url, params, consumerKey, consumerSecret) {
-  const encodedConsumerKey = encodeURIComponent(consumerKey);
-  const encodedConsumerSecret = encodeURIComponent(consumerSecret);
-  const encodedParams = encodeURIComponent(params);
-
-  const baseString = `${method}&${url}&${encodedParams}`;
-  const signingKey = `${encodedConsumerSecret}&`;
-
-  const signature = crypto
-    .createHmac('sha1', signingKey)
-    .update(baseString)
-    .digest('base64');
-
-  return signature;
-}
 
 /**
  * Performs the OAuth1 request for obtaining the request token.
@@ -39,10 +14,8 @@ function generateOAuth1Signature(method, url, params, consumerKey, consumerSecre
  * @returns {Promise<string>} - A promise that resolves with the OAuth token.
  */
 async function getRequestToken(consumerKey, consumerSecret) {
-  const method = 'POST';
   const url = 'https://api.discogs.com/oauth/request_token';
   const timestamp = Date.now();
-
   const data = qs.stringify({
     'oauth_callback': 'http://localhost:3000/callback',
     'oauth_consumer_key': consumerKey,
@@ -51,8 +24,6 @@ async function getRequestToken(consumerKey, consumerSecret) {
     'oauth_timestamp': timestamp,
     'oauth_version': '1.0',
   });
-
-  const signature = generateOAuth1Signature(method, url, data, consumerSecret);
 
   const config = {
     method: 'post',
