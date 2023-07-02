@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <button onclick="loginWithOAuth()">Login with OAuth</button>
+
+  <script>
+    function loginWithOAuth() {
+      // Replace the following code with your OAuth logic
+      fetch('/oauth/request-token') // Update the fetch URL to use a relative URL
+        .then(response => response.json())
+        .then(data => {
+          // Redirect the user to the OAuth provider's authorization page
+          window.location.href = data.verificationURL;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  </script>
+</body>
+</html>
