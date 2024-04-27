@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Collection</title>
+  <style>
+    .release-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .release-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .release-details {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>User Collection</h1>
+  <div id="collectionData">${generateReleaseListHtml(collection.releases)}</div>
+
+  <script>
+    function generateReleaseListHtml(releases) {
+  return releases.map(release => {
+    //  console.log('releases[0].basic_information',releases[0].basic_information);
+    const {
+      id,
+      basic_information: {
+        title,
+        artists,
+        year,
+        labels
+      },
+      notes
+    } = release;
+
+    const artist = artists[0].name;
+    const label = labels[0].name;
+
+    // Handle notes
+    const notesHtml = notes ? `<p><strong>Notes:</strong> ${notes.join(', ')}</p>` : '';
+
+    return `
+      <div class="release-item">
+        <div class="release-title">${title}</div>
+        <div class="release-details">
+          <p><strong>Artist:</strong> ${artist}</p>
+          <p><strong>Year:</strong> ${year}</p>
+          <p><strong>Label:</strong> ${label}</p>
+          ${notesHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+    // Get the collection data from the server-side rendered HTML
+    const collectionData = JSON.parse(`{{collectionData}}`);
+
+    // Render the collection data on the page
+    const collectionDataContainer = document.getElementById('collectionData');
+    collectionDataContainer.innerHTML = generateReleaseListHtml(collectionData.releases);
+  </script>
+</body>
+</html>
